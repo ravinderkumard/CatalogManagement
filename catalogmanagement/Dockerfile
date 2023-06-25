@@ -1,6 +1,6 @@
 FROM openjdk:8
 
-ADD target/catalogmanagement*.jar catalogmanagement.jar
+ADD /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/catalogmanagement*.jar catalogmanagement.jar
 
 EXPOSE 8080
 
