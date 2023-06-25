@@ -50,6 +50,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<finalName>javaexpress-springboot-docker</finalName>
+		<finalName>catalog-management-docker</finalName>
 	</build>
 </project>
