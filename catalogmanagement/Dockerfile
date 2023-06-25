@@ -1,6 +1,6 @@
 FROM openjdk:8
 
-ADD target/catalogmanagement.jar catalogmanagement.jar
+ADD target/catalogmanagement*.jar catalogmanagement.jar
 
 EXPOSE 8080
 
