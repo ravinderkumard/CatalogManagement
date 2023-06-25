@@ -2,7 +2,9 @@ pipeline {
     agent any 
     tools {
         maven "3.8.4"
-    
+    }
+    environment {
+        registryCredential = 'dockerhub_id'
     }
     stages {
         stage('Compile and Clean') { 
@@ -23,26 +25,28 @@ pipeline {
             steps {
                 echo "Hello Java Express"
                 sh 'ls'
-                sh 'docker build -t  anvbhaskar/docker_jenkins_springboot:${BUILD_NUMBER} .'
+                sh 'docker build -t  ravinderdabgotra/catalogmanagement:${BUILD_NUMBER} .'
             }
         }
         stage('Docker Login'){
             
-            steps {
-                 withCredentials([string(credentialsId: 'DockerId', variable: 'Dockerpwd')]) {
-                    sh "docker login -u anvbhaskar -p ${Dockerpwd}"
+            steps{
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
                 }
-            }                
+            }           
         }
         stage('Docker Push'){
             steps {
-                sh 'docker push anvbhaskar/docker_jenkins_springboot:${BUILD_NUMBER}'
+                sh 'docker push ravinderkumard/catalogmanagement:${BUILD_NUMBER}'
             }
         }
         stage('Docker deploy'){
             steps {
                
-                sh 'docker run -itd -p  8081:8080 anvbhaskar/docker_jenkins_springboot:${BUILD_NUMBER}'
+                sh 'docker run -itd -p  8081:8080 ravinderkumard/catalogmanagement:${BUILD_NUMBER}'
             }
         }
         stage('Archving') { 
