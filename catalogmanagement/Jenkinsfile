@@ -11,13 +11,13 @@ pipeline {
             steps {
                 // Run Maven on a Unix agent.
               
-                sh "mvn clean compile"
+                sh "mvn -f catalogmanagement/ clean compile"
             }
         }
         stage('deploy') { 
             
             steps {
-                sh "mvn package"
+                sh "mvn -f catalogmanagement/ package"
             }
         }
         stage('Build Docker image'){
