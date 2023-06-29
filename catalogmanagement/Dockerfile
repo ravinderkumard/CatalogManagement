@@ -1,6 +1,6 @@
 FROM openjdk:8
 
-ADD /*/catalogmanagement-0.0.1-SNAPSHOT.jar catalogmanagement.jar
+ADD /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/catalog-management-docker.jar catalogmanagement.jar
 
 EXPOSE 8080
 
