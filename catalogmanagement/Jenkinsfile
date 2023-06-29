@@ -9,7 +9,7 @@ pipeline {
         DOCKER_REGISTRY_CREDENTIALS_ID = 'dockerhub'
         DOCKER_REPO = 'ravinderdabgotra'
         IMAGE_NAME = 'catalogmanagement'
-        IMAGE_TAG = 'latest'
+        IMAGE_TAG = '1.0'
     }
     stages {
         stage('Compile and Clean') { 
