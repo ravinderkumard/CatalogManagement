@@ -1,6 +1,6 @@
 FROM openjdk:8
 
-ADD /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/*.jar .
+COPY /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/catalog-management-docker.jar .
 
 EXPOSE 18080
 
