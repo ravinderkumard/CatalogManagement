@@ -1,6 +1,6 @@
 FROM openjdk:8
-RUN echo "PWD is: $PWD"
-COPY /home/ec2-user/catalog-management-docker.jar .
+WORKDIR /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/
+COPY catalog-management-docker.jar .
 
 EXPOSE 18080
 
