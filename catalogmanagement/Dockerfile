@@ -1,6 +1,9 @@
+FROM alpine AS builder
+COPY /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/catalog-management-docker.jar /app/catalog-management-docker.jar
+
 FROM openjdk:8
-WORKDIR /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/
-COPY catalog-management-docker.jar .
+
+COPY --from=builder /app/catalog-management-docker.jar .
 
 EXPOSE 18080
 
