@@ -6,7 +6,7 @@ FROM maven:3.8.4-openjdk-11-slim AS build
 WORKDIR /app
 
 # Copy the pom.xml file to the container
-COPY pom.xml .
+COPY catalogmanagement/pom.xml .
 
 # Download the dependencies required for building the application
 RUN mvn dependency:go-offline -B
