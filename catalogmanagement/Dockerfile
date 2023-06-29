@@ -1,7 +1,7 @@
 FROM openjdk:8
 
-ADD /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/catalog-management-docker.jar .
+ADD /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/*.jar .
 
-EXPOSE 8080
+EXPOSE 18080
 
 ENTRYPOINT ["java","-jar","catalog-management-docker.jar"]
