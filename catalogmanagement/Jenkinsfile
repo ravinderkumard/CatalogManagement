@@ -19,7 +19,7 @@ pipeline {
             steps {
                 sh "mvn -f catalogmanagement/ package"
                 sh "ls /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/"
-                sh "cp /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/catalog-management-docker.jar /catalog-management-docker.jar"
+                sh "cp /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/catalog-management-docker.jar /home/ec2-user/catalog-management-docker.jar"
             }
         }
         stage('Build Docker image'){
