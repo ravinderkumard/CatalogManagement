@@ -18,6 +18,7 @@ pipeline {
             
             steps {
                 sh "mvn -f catalogmanagement/ package"
+                sh "ls /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/"
             }
         }
         stage('Build Docker image'){
