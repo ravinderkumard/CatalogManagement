@@ -31,11 +31,11 @@ pipeline {
             steps {
                 // echo "Hello Java Express"
                 // sh 'ls'
-                // sh 'docker build -f catalogmanagement/Dockerfile -t ravinderdabgotra/catalogmanagement:${BUILD_NUMBER} .'
-                script {
-                    def dockerImage = docker.build("${DOCKER_REGISTRY_URL}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
-                    dockerImage.push()
-                }
+                sh 'docker build -f catalogmanagement/Dockerfile -t ravinderdabgotra/catalogmanagement:${BUILD_NUMBER} .'
+                // script {
+                //     def dockerImage = docker.build("${DOCKER_REGISTRY_URL}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
+                //     dockerImage.push()
+                // }
             }
         }
         
