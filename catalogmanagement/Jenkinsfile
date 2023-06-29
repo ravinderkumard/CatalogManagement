@@ -37,10 +37,11 @@ pipeline {
                 //     dockerImage.push()
                 // }
                 script {
-                withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDENTIALS_ID}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    def dockerImage = docker.build("${DOCKER_REGISTRY_URL}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
-                    docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_USERNAME}", "${DOCKER_PASSWORD}") {
-                        dockerImage.push()
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDENTIALS_ID}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        def dockerImage = docker.build("${DOCKER_REGISTRY_URL}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
+                        docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_USERNAME}", "${DOCKER_PASSWORD}") {
+                            dockerImage.push()
+                        }
                     }
                 }
             }
