@@ -1,6 +1,6 @@
 FROM openjdk:8
 RUN echo "PWD is: $PWD"
-COPY /catalog-management-docker.jar .
+COPY /home/ec2-user/catalog-management-docker.jar .
 
 EXPOSE 18080
 
