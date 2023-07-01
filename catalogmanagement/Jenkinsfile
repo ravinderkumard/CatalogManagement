@@ -17,6 +17,8 @@ pipeline {
         DOCKER_IMAGE = 'catalogmanagement'
         ECS_CLUSTER = 'arn:aws:ecs:us-east-1:872115738621:cluster/MyeComCluster'
         ECS_SERVICE = 'arn:aws:ecs:us-east-1:872115738621:service/MyeComCluster/catalogmanagement'
+        FAMILY='catalog30'
+        REVISION=''
     }
     stages {
         stage('Compile and Clean') { 
