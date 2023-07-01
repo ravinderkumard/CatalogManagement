@@ -23,16 +23,13 @@ pipeline {
     stages {
         stage('Compile and Clean') { 
             steps {
-                // Run Maven on a Unix agent.
-              
                 sh "mvn -f catalogmanagement/ clean compile"
             }
         }
-        stage('deploy') { 
+        stage('Package') { 
             
             steps {
                 sh "mvn -f catalogmanagement/ package"
-                sh "ls /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/"
             }
         }
         stage('Build Docker image'){
@@ -40,27 +37,21 @@ pipeline {
             steps {
 
                 sh 'docker build -f catalogmanagement/Dockerfile -t ravinderdabgotra/catalogmanagement:${BUILD_NUMBER} .'
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
+                // sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
             }
         }
-        stage('Docker Push'){
+        stage('Push to Docker Hub'){
             steps {
                 sh 'docker push ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
             }
         }
-        stage('Docker deploy'){
-            steps {
-               sh "cp catalogmanagement/task_defintion.json ."
-               sh "sed 's/CHANGE_BUILD_NUMBER/${BUILD_NUMBER}/g' task_defintion.json > task_definition.json"
-                // sh 'docker run -itd -p  18080:18080 ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
-            }
-        }
         
-        stage('Deploy to ECS') {
+        stage('Deploy Task Definition to ECS') {
             steps {
                 script {
                     // Authenticate with AWS
-                        
+                        sh "cp catalogmanagement/task_defintion.json ."
+                        sh "sed 's/CHANGE_BUILD_NUMBER/${BUILD_NUMBER}/g' task_defintion.json > task_definition.json"
                         sh 'aws configure set aws_access_key_id $AWS_CREDENTIALS_USR'
                         sh 'aws configure set aws_secret_access_key $AWS_CREDENTIALS_PSW'
                         sh 'aws configure set default.region $AWS_DEFAULT_REGION'
@@ -70,8 +61,6 @@ pipeline {
                         sh "export REVISION=`aws ecs describe-task-definition --task-definition ${FAMILY} --region ${AWS_DEFAULT_REGION} | jq .taskDefinition.revision`"
                         // Update ECS service
                         sh 'echo ${REVISION}'
-                        //sh "aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition ${FAMILY}:14 --force-new-deployment --region $AWS_DEFAULT_REGION"
-                    
                 }
             }
         }
