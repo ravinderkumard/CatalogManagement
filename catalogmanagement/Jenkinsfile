@@ -52,19 +52,7 @@ pipeline {
         //         sh 'docker run -itd -p  18080:18080 ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
         //     }
         // }
-        stage('SetVariable') {
-            steps {
-                script {
-                    releasePackages = readJSON file: "catalogmanagement/task_defintion.json"
-                    echo "$releasePackages"
-                }
-            }
-        }
-        stage('UseVariable') {
-            steps {
-                   echo "$releasePackages"           
-            }
-        }
+        
         stage('Deploy to ECS') {
             steps {
                 script {
