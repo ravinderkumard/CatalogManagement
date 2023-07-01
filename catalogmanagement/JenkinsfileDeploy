@@ -30,11 +30,8 @@ pipeline {
                         sh 'aws configure set aws_secret_access_key $AWS_CREDENTIALS_PSW'
                         sh 'aws configure set default.region $AWS_DEFAULT_REGION'
                         
-                        // Register a new task definition
-                        //sh "aws ecs register-task-definition --cli-input-json file://task_definition.json --region $AWS_DEFAULT_REGION"
-                        //sh "export REVISION=`aws ecs describe-task-definition --task-definition ${FAMILY} --region ${AWS_DEFAULT_REGION} | jq .taskDefinition.revision`"
-                        // Update ECS service
-                        //sh 'echo ${REVISION}'
+                        sh 'echo "Update ECS service"'
+                        
                         sh "aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition ${FAMILY}:${REVISION_NUMBER} --force-new-deployment --region $AWS_DEFAULT_REGION"
                     
                 }
