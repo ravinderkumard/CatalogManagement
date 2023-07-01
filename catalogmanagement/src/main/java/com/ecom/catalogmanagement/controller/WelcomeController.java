@@ -10,6 +10,6 @@ public class WelcomeController {
 	
 	@GetMapping
 	public String welcome() {
-		return "Hello I am Controller 1 with Task Definition Build 58";
+		return "Hello I am Controller 1 with Task Definition Build 59";
 	}
 }
