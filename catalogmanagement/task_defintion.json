@@ -32,7 +32,7 @@
         }
     ],
     "family": "catalog30",
-    "executionRoleArn": "arn:aws:iam::872115738621:role/ecsTaskExecutionRole",
+    "executionRoleArn": "ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "revision": 1,
     "volumes": [],
