@@ -57,8 +57,7 @@ pipeline {
             steps {
                 script {
                     // Authenticate with AWS
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-access-key-id']]) {
-                         
+                        
                         sh 'aws configure set aws_access_key_id $AWS_CREDENTIALS_USR'
                         sh 'aws configure set aws_secret_access_key $AWS_CREDENTIALS_PSW'
                         sh 'aws configure set default.region $AWS_DEFAULT_REGION'
@@ -68,7 +67,7 @@ pipeline {
                         
                         // Update ECS service
                         sh "aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment --region $AWS_DEFAULT_REGION"
-                    }
+                    
                 }
             }
         }
