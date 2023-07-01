@@ -3,7 +3,7 @@
     "containerDefinitions": [
         {
             "name": "catalog30",
-            "image": "docker.io/ravinderdabgotra/catalogmanagement:45",
+            "image": "docker.io/ravinderdabgotra/catalogmanagement:CHANGE_BUILD_NUMBER",
             "cpu": 0,
             "portMappings": [
                 {
