@@ -70,7 +70,7 @@ pipeline {
                         sh "export REVISION=`aws ecs describe-task-definition --task-definition ${FAMILY} --region ${AWS_DEFAULT_REGION} | jq .taskDefinition.revision`"
                         // Update ECS service
                         sh 'echo ${REVISION}'
-                        sh "aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition ${FAMILY}:14 --force-new-deployment --region $AWS_DEFAULT_REGION"
+                        //sh "aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition ${FAMILY}:14 --force-new-deployment --region $AWS_DEFAULT_REGION"
                     
                 }
             }
