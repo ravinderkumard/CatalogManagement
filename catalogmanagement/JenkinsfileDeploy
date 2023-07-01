@@ -24,7 +24,7 @@ pipeline {
         stage('Deploy to ECS') {
             steps {
                 script {
-                    
+                        sh 'echo ${REVISION_NUMBER}'
                         
                         sh 'aws configure set aws_access_key_id $AWS_CREDENTIALS_USR'
                         sh 'aws configure set aws_secret_access_key $AWS_CREDENTIALS_PSW'
