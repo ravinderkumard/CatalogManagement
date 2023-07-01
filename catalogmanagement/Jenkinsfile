@@ -19,6 +19,7 @@ pipeline {
         ECS_SERVICE = 'arn:aws:ecs:us-east-1:872115738621:service/MyeComCluster/catalogmanagement'
         FAMILY='catalog30'
         REVISION=''
+        SONAR_TOKEN = fd98989da72dd3d3774d8192f065db1125389d25
     }
     stages {
         stage('Compile and Clean') { 
