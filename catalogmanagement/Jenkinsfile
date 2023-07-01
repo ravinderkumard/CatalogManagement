@@ -51,7 +51,7 @@ pipeline {
         stage('Docker deploy'){
             steps {
                sh "cp catalogmanagement/task_defintion.json ."
-               sh "sed 's/CHANGE_BUILD_NUMBER/${BUILD_NUMBER}/g' task_defintion.json"
+               sh "sed 's/CHANGE_BUILD_NUMBER/${BUILD_NUMBER}/g' task_defintion.json > task_definition.json"
                 // sh 'docker run -itd -p  18080:18080 ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
             }
         }
@@ -66,11 +66,11 @@ pipeline {
                         sh 'aws configure set default.region $AWS_DEFAULT_REGION'
                         
                         // Register a new task definition
-                        sh "aws ecs register-task-definition --cli-input-json file://task_defintion.json --region $AWS_DEFAULT_REGION"
+                        sh "aws ecs register-task-definition --cli-input-json file://task_definition.json --region $AWS_DEFAULT_REGION"
                         sh "export REVISION=`aws ecs describe-task-definition --task-definition ${FAMILY} --region ${AWS_DEFAULT_REGION} | jq .taskDefinition.revision`"
                         // Update ECS service
                         sh 'echo ${REVISION}'
-                        sh "aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition ${FAMILY}:13 --force-new-deployment --region $AWS_DEFAULT_REGION"
+                        sh "aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition ${FAMILY}:14 --force-new-deployment --region $AWS_DEFAULT_REGION"
                     
                 }
             }
