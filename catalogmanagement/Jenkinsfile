@@ -46,12 +46,12 @@ pipeline {
                 sh 'docker push ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
             }
         }
-        // stage('Docker deploy'){
-        //     steps {
-               
-        //         sh 'docker run -itd -p  18080:18080 ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
-        //     }
-        // }
+        stage('Docker deploy'){
+            steps {
+               sh "cp catalogmanagement/task-definition.json ."
+                // sh 'docker run -itd -p  18080:18080 ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
+            }
+        }
         
         stage('Deploy to ECS') {
             steps {
