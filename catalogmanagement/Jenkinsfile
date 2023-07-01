@@ -31,7 +31,7 @@ pipeline {
             
             steps {
                 sh "mvn -f catalogmanagement/ package"
-                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ravinderkumard_catalogmanagement"
+                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -f catalogmanagement/ -Dsonar.projectKey=ravinderkumard_catalogmanagement"
             }
         }
         stage('Build Docker image'){
