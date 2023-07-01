@@ -36,46 +36,22 @@ pipeline {
         stage('Build Docker image'){
           
             steps {
-                // echo "Hello Java Express"
-                // sh 'ls'
+
                 sh 'docker build -f catalogmanagement/Dockerfile -t ravinderdabgotra/catalogmanagement:${BUILD_NUMBER} .'
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
-                // script {
-                //     def dockerImage = docker.build("${DOCKER_REGISTRY_URL}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
-                //     dockerImage.push()
-                // }
-                // script {
-                //     withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDENTIALS_ID}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                //         def dockerImage = docker.build("${DOCKER_REGISTRY_URL}/${DOCKER_REPO}/${IMAGE_NAME}:${BUILD_NUMBER}", "-f catalogmanagement/Dockerfile -t ${DOCKER_REPO}/${IMAGE_NAME}:${BUILD_NUMBER} .")
-                //         docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_USERNAME}", "${DOCKER_PASSWORD}") {
-                //             dockerImage.push()
-                //         }
-                //     }
-                // }
             }
-        }
-        stage('Docker Login'){
-            
-            steps{
-                sh 'echo Login Succeed'
-                // script {
-                //     docker.withRegistry( '', registryCredential ) {
-                //         dockerImage.push()
-                //     }
-                // }
-            }           
         }
         stage('Docker Push'){
             steps {
                 sh 'docker push ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
             }
         }
-        stage('Docker deploy'){
-            steps {
+        // stage('Docker deploy'){
+        //     steps {
                
-                sh 'docker run -itd -p  18080:18080 ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
-            }
-        }
+        //         sh 'docker run -itd -p  18080:18080 ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
+        //     }
+        // }
         stage('Deploy to ECS') {
             steps {
                 script {
