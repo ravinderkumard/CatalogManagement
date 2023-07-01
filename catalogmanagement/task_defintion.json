@@ -1,5 +1,5 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:872115738621:task-definition/catalog30:1",
+    
     "containerDefinitions": [
         {
             "name": "catalog30",
