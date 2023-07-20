@@ -1,0 +1,41 @@
+pipeline {
+    agent any 
+    
+    environment {
+        registryCredential = 'dockerhub'
+        DOCKER_REGISTRY_URL = 'http://hub.docker.com'
+        DOCKER_REGISTRY_CREDENTIALS_ID = 'dockerhub'
+        DOCKER_REPO = 'ravinderdabgotra'
+        IMAGE_NAME = 'catalogmanagement'
+        IMAGE_TAG = '1.0'
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        AWS_CREDENTIALS = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+        AWS_DEFAULT_REGION = 'us-east-1'
+        DOCKER_IMAGE = 'catalogmanagement'
+        ECS_CLUSTER = 'arn:aws:ecs:us-east-1:872115738621:cluster/MyeComCluster'
+        ECS_SERVICE = 'arn:aws:ecs:us-east-1:872115738621:service/MyeComCluster/catalogmanagement'
+        FAMILY='catalog30'
+        REVISION=15
+    }
+    stages {
+        
+        
+        stage('Deploy to ECS') {
+            steps {
+                script {
+                        sh 'echo ${REVISION_NUMBER}'
+                        
+                        sh 'aws configure set aws_access_key_id $AWS_CREDENTIALS_USR'
+                        sh 'aws configure set aws_secret_access_key $AWS_CREDENTIALS_PSW'
+                        sh 'aws configure set default.region $AWS_DEFAULT_REGION'
+                        
+                        sh 'echo "Update ECS service"'
+                        
+                        sh "aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition ${FAMILY}:${REVISION_NUMBER} --force-new-deployment --region $AWS_DEFAULT_REGION"
+                    
+                }
+            }
+        }
+    }
+}

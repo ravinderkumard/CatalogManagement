@@ -1,0 +1,55 @@
+{
+    
+    "containerDefinitions": [
+        {
+            "name": "catalog30",
+            "image": "docker.io/ravinderdabgotra/catalogmanagement:CHANGE_BUILD_NUMBER",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "catalog30-18080-tcp",
+                    "containerPort": 18080,
+                    "hostPort": 18080,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/catalog30",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "family": "catalog30",
+    "executionRoleArn": "ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "volumes": [],
+    "placementConstraints": [],
+   
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "3072",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "tags": [
+        {
+          "key": "name",
+          "value": "catalogmanagement"
+        }
+    ]
+}

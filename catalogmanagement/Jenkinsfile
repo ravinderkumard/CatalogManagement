@@ -11,63 +11,59 @@ pipeline {
         IMAGE_NAME = 'catalogmanagement'
         IMAGE_TAG = '1.0'
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        AWS_CREDENTIALS = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+        AWS_DEFAULT_REGION = 'us-east-1'
+        DOCKER_IMAGE = 'catalogmanagement'
+        ECS_CLUSTER = 'arn:aws:ecs:us-east-1:872115738621:cluster/MyeComCluster'
+        ECS_SERVICE = 'arn:aws:ecs:us-east-1:872115738621:service/MyeComCluster/catalogmanagement'
+        FAMILY='catalog30'
+        REVISION=''
+        SONAR_TOKEN = 'fd98989da72dd3d3774d8192f065db1125389d25'
     }
     stages {
         stage('Compile and Clean') { 
             steps {
-                // Run Maven on a Unix agent.
-              
                 sh "mvn -f catalogmanagement/ clean compile"
             }
         }
-        stage('deploy') { 
+        stage('Package') { 
             
             steps {
                 sh "mvn -f catalogmanagement/ package"
-                sh "ls /var/lib/jenkins/workspace/catalogmanagementpipeline/catalogmanagement/target/"
+                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -f catalogmanagement/ -Dsonar.projectKey=ravinderkumard_catalogmanagement"
             }
         }
         stage('Build Docker image'){
           
             steps {
-                // echo "Hello Java Express"
-                // sh 'ls'
+
                 sh 'docker build -f catalogmanagement/Dockerfile -t ravinderdabgotra/catalogmanagement:${BUILD_NUMBER} .'
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
-                // script {
-                //     def dockerImage = docker.build("${DOCKER_REGISTRY_URL}/${DOCKER_REPO}/${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
-                //     dockerImage.push()
-                // }
-                // script {
-                //     withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDENTIALS_ID}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                //         def dockerImage = docker.build("${DOCKER_REGISTRY_URL}/${DOCKER_REPO}/${IMAGE_NAME}:${BUILD_NUMBER}", "-f catalogmanagement/Dockerfile -t ${DOCKER_REPO}/${IMAGE_NAME}:${BUILD_NUMBER} .")
-                //         docker.withRegistry("${DOCKER_REGISTRY_URL}", "${DOCKER_USERNAME}", "${DOCKER_PASSWORD}") {
-                //             dockerImage.push()
-                //         }
-                //     }
-                // }
+                // sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
             }
         }
-        stage('Docker Login'){
-            
-            steps{
-                sh 'echo Login Succeed'
-                // script {
-                //     docker.withRegistry( '', registryCredential ) {
-                //         dockerImage.push()
-                //     }
-                // }
-            }           
-        }
-        stage('Docker Push'){
+        stage('Push to Docker Hub'){
             steps {
                 sh 'docker push ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
             }
         }
-        stage('Docker deploy'){
+        
+        stage('Deploy Task Definition to ECS') {
             steps {
-               
-                sh 'docker run -itd -p  18080:18080 ravinderdabgotra/catalogmanagement:${BUILD_NUMBER}'
+                script {
+                    // Authenticate with AWS
+                        sh "cp catalogmanagement/task_defintion.json ."
+                        sh "sed 's/CHANGE_BUILD_NUMBER/${BUILD_NUMBER}/g' task_defintion.json > task_definition.json"
+                        sh 'aws configure set aws_access_key_id $AWS_CREDENTIALS_USR'
+                        sh 'aws configure set aws_secret_access_key $AWS_CREDENTIALS_PSW'
+                        sh 'aws configure set default.region $AWS_DEFAULT_REGION'
+                        
+                        // Register a new task definition
+                        sh "aws ecs register-task-definition --cli-input-json file://task_definition.json --region $AWS_DEFAULT_REGION"
+                        sh "export REVISION=`aws ecs describe-task-definition --task-definition ${FAMILY} --region ${AWS_DEFAULT_REGION} | jq .taskDefinition.revision`"
+                        // Update ECS service
+                        sh 'echo ${REVISION}'
+                }
             }
         }
         stage('Archving') { 
