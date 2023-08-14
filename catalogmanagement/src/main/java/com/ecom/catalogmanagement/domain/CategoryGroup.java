@@ -1,13 +1,42 @@
 package com.ecom.catalogmanagement.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity(name = "CategoryGroup")
 public class CategoryGroup {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
+	
+	@Column(name = "catGroupName")
 	String name;
+	@Column(name = "catGroupCode")
+	String catGroupCode;
+	
 	String shortDescription;
 	String longDescription;
+	@Column(name = "imageUrl")
 	String image;
+	@Column(name="thumbnailUrl")
 	String thumbnail;
+	Integer parentCatGroup;
+	public String getCatGroupCode() {
+		return catGroupCode;
+	}
+	public void setCatGroupCode(String catGroupCode) {
+		this.catGroupCode = catGroupCode;
+	}
+	public Integer getParentCatGroup() {
+		return parentCatGroup;
+	}
+	public void setParentCatGroup(Integer parentCatGroup) {
+		this.parentCatGroup = parentCatGroup;
+	}
 	public int getId() {
 		return id;
 	}
